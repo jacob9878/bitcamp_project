@@ -22,7 +22,6 @@ else{
 }
 String tID = request.getParameter("tID");
 %>    
-    
 	    
 <!DOCTYPE html>
 <html>
@@ -157,7 +156,7 @@ String tID = request.getParameter("tID");
 					'<div class="col-lg-12">' +
 						'<div class="media">' +
 							'<a class="pull-left" href="#">' +
-								'<img class="media-object img-circle" style="width: 33px; height: 33px;" src="images/icon.png" alt="">' +
+								'<img class="media-object img-circle" style="width: 33px; height: 33px;" src="images/circleIcon.png" alt="">' +
 							'</a>' +
 							'<div class="media-body">' +
 								'<h4 class="media-heading">' +
@@ -181,7 +180,7 @@ String tID = request.getParameter("tID");
 		function getInfiniteChat() {
 			setInterval(function() {
 				chatListFunction(lastID);	//채팅이 새로 쳐질 때마다
-			}, 2000);
+			}, 1000);
 		}
 	
 	</script>
@@ -198,7 +197,7 @@ String tID = request.getParameter("tID");
 				<div class="portlet portlet-default">
 					<div class="portlet-heading">
 						<div class="portlet-title">
-							<h4><i class="fa fa-circle text-green"></i> 1:1 PT 상담 채팅</h4>
+							<h4><i class="fa fa-circle text-green"></i> PT 상담 </h4>
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -221,7 +220,7 @@ String tID = request.getParameter("tID");
 			</div>
 		</div>
 	</div>
-	
+<!-- 	
 	<div class="alert alert-success" id="successMessage" style="display: none;">
 		<strong>메시지 전송에 성공했습니다.</strong>
 	</div>
@@ -231,7 +230,7 @@ String tID = request.getParameter("tID");
 	<div class="alert alert-warning" id="warningMessage" style="display: none;">
 		<strong>데이터 오류가 발생했습니다.</strong>
 	</div>
-	
+	 -->
 	
 	
 		<!-- ---------중복체크 & 회원가입 버튼 alert--------- -->

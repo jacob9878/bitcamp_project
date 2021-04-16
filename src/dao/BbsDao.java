@@ -24,106 +24,54 @@ private static BbsDao dao = new BbsDao();
 		return dao;
 	}
 	
-	public List<BbsDto> getBbsList() {
+	
+	public boolean writeBbs(BbsDto dto) {
 		
-		String sql = " SELECT MEMBERID, SEQ, REF, STEP, DEPTH, "
-						+ " TITLE, CONTENT, WDATE, "
-						+ " DEL, READCOUNT, LIKECOUNT, IMG, DIVISION, BBSTYPE "
-					+ " FROM BBS "
-					+ " WHERE BBSTYPE=1 "
-					+ " ORDER BY REF DESC, STEP ASC ";
+		String sql = " INSERT INTO BBS "
+					+ " (SEQ, MEMBERID, REF, STEP, DEPTH, "
+					+ " TITLE, CONTENT, WDATE, "
+					+ " DEL, READCOUNT, LIKECOUNT, IMG, NEWFILENAME, DIVISION, BBSTYPE) "
+					+ " VALUES( SEQ_BBS.NEXTVAL, ?, "
+							+ "	(SELECT NVL(MAX(REF), 0)+1 FROM BBS), 0, 0, "
+							+ " ?, ?, SYSDATE, "
+							+ " 0, 0, 0, ?, ?, ?, ?) "; 
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
-		ResultSet rs = null;
 		
-		List<BbsDto> list = new ArrayList<BbsDto>();
+		int count = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
-			System.out.println("1/4 getBbsList success");
-				
+			System.out.println("1/3 writeBbs success");
+			
 			psmt = conn.prepareStatement(sql);
-			System.out.println("2/4 getBbsList success");
+			psmt.setString(1, dto.getMemberId());
+			psmt.setString(2, dto.getTitle());
+			psmt.setString(3, dto.getContent());
+			psmt.setString(4, dto.getImg());
+			psmt.setString(5, dto.getNewfilename());
+			psmt.setString(6, dto.getDivision());
+			psmt.setInt(7, dto.getBbstype());
+			System.out.println("2/3 writeBbs success");
 			
-			rs = psmt.executeQuery();
-			System.out.println("3/4 getBbsList success");
+			count = psmt.executeUpdate();
+			System.out.println("3/3 writeBbs success");			
 			
-			while(rs.next()) {
-				BbsDto dto = new BbsDto(rs.getString(1), 
-										rs.getInt(2), 
-										rs.getInt(3), 
-										rs.getInt(4), 
-										rs.getInt(5), 
-										rs.getString(6), 
-										rs.getString(7), 
-										rs.getString(8), 
-										rs.getInt(9), 
-										rs.getInt(10),
-										rs.getInt(11),
-										rs.getString(12),
-										rs.getString(13),
-										rs.getInt(14));
-				list.add(dto);
-			}			
-			System.out.println("4/4 getBbsList success");
-			
-		} catch (SQLException e) {	
-			System.out.println("getBbsList fail");
+		} catch (Exception e) {
+			System.out.println("writeBbs fail");	
 			e.printStackTrace();
-		} finally {			
-			DBClose.close(conn, psmt, rs);			
+		} finally {
+			
+			DBClose.close(conn, psmt, null);			
 		}
-		
-		return list;
+		return count>0?true:false;
 	}
-	
-	public boolean writeBbs(BbsDto dto) {
-			
-			String sql = " INSERT INTO BBS "
-						+ " (SEQ, MEMBERID, REF, STEP, DEPTH, "
-						+ " TITLE, CONTENT, WDATE, "
-						+ " DEL, READCOUNT, LIKECOUNT, IMG, DIVISION, BBSTYPE) "
-						+ " VALUES( SEQ_BBS.NEXTVAL, ?, "
-								+ "	(SELECT NVL(MAX(REF), 0)+1 FROM BBS), 0, 0, "
-								+ " ?, ?, SYSDATE, "
-								+ " 0, 0, 0, ?, ?, ?) "; 
-			
-			Connection conn = null;
-			PreparedStatement psmt = null;
-			
-			int count = 0;
-			
-			try {
-				conn = DBConnection.getConnection();
-				System.out.println("1/3 writeBbs success");
-				
-				psmt = conn.prepareStatement(sql);
-				psmt.setString(1, dto.getMemberId());
-				psmt.setString(2, dto.getTitle());
-				psmt.setString(3, dto.getContent());
-				psmt.setString(4, dto.getImg());
-				psmt.setString(5, dto.getDivision());
-				psmt.setInt(6, dto.getBbstype());
-				System.out.println("2/3 writeBbs success");
-				
-				count = psmt.executeUpdate();
-				System.out.println("3/3 writeBbs success");			
-				
-			} catch (Exception e) {
-				System.out.println("writeBbs fail");	
-				e.printStackTrace();
-			} finally {
-				
-				DBClose.close(conn, psmt, null);			
-			}
-			return count>0?true:false;
-		}
 
 	public BbsDto getBbs(int seq) {
 		String sql =  " SELECT MEMBERID, SEQ, REF, STEP, DEPTH, "
 					+ " TITLE, CONTENT, WDATE, "
-					+ " DEL, READCOUNT, LIKECOUNT, IMG, DIVISION, BBSTYPE "
+					+ " DEL, READCOUNT, LIKECOUNT, IMG, NEWFILENAME, DIVISION, BBSTYPE "
 					+ " FROM BBS "
 					+ " WHERE SEQ=? ";
 	
@@ -159,7 +107,8 @@ private static BbsDao dao = new BbsDao();
 						rs.getInt(11),
 						rs.getString(12),
 						rs.getString(13),
-						rs.getInt(14));
+						rs.getString(14),
+						rs.getInt(15));
 			}
 			System.out.println("4/4 getBbs success");
 			
@@ -210,31 +159,72 @@ private static BbsDao dao = new BbsDao();
 		
 		try {
 			conn = DBConnection.getConnection();
-			System.out.println("1/3 readcount success");
+			System.out.println("1/3 likecount success");
 				
 			psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, seq);
-			System.out.println("2/3 readcount success");
+			System.out.println("2/3 likecount success");
 			
 			psmt.executeUpdate();
-			System.out.println("3/3 readcount success");
+			System.out.println("3/3 likecount success");
 			
 		} catch (SQLException e) {
-			System.out.println("readcount fail");
+			System.out.println("likecount fail");
 			e.printStackTrace();
 		} finally {
 			DBClose.close(conn, psmt, null);
 		}				
 	}
 	
-	public boolean updateBbs(int seq, String title, String content, String img, String division) {
+	
+	public int getLikeCount(int seq) {
+		String sql = " SELECT LIKECOUNT "
+				+ " FROM BBS "
+				+ " WHERE SEQ=? ";
+		
+
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		int likeCount = -1;	//없는 글이면 -1로 반환하게
+				
+		try {
+			conn = DBConnection.getConnection();
+			System.out.println("1/3 getLikeCount success");
+			
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, seq);
+			System.out.println("2/3 getLikeCount success");
+			
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				likeCount = rs.getInt(1);
+			}
+			System.out.println("3/3 getLikeCount success");
+			
+		} catch (SQLException e) {
+			System.out.println("getLikeCount fail");
+			e.printStackTrace();
+		} finally {
+			DBClose.close(conn, psmt, rs);			
+		}
+		
+		return likeCount;
+		
+	}
+	
+	
+	public boolean updateBbs(int seq, String title, String content, String img,String newFilename,String division ) {
 		String sql = " UPDATE BBS SET "
 				+ " TITLE=?, CONTENT=? ";
 				
 		if(img != null && !img.equals("")) {
 			sql += " , IMG='"+img+"' ";
 		}
-		
+		if(newFilename !=null && !newFilename.equals("")) {
+			sql += ", NEWFILENAME='"+newFilename+"'";
+		}
 		if(division != null && !division.equals("")) {
 			sql += " , DIVISION='"+division+"'  ";
 		}
@@ -389,17 +379,18 @@ private static BbsDao dao = new BbsDao();
 	
 	
 	
-		String sql = " SELECT MEMBERID, SEQ, REF, STEP, DEPTH, "
-					+ " TITLE, CONTENT, WDATE, DEL, READCOUNT, LIKECOUNT, "
-					+ " IMG, DIVISION, BBSTYPE "
+		String sql = " SELECT B. MEMBERID, B.SEQ, B.REF, B.STEP,B. DEPTH, "
+					+ "  B.TITLE, B.CONTENT, B.WDATE, B.DEL, B.READCOUNT, B.LIKECOUNT, "
+					+ " B.IMG, B.DIVISION, B.BBSTYPE, M.MEMLEVEL "
 					+ " FROM ";
 		
 		sql += "(SELECT ROW_NUMBER()OVER(ORDER BY REF DESC, STEP ASC) AS RNUM, " + 
 				" MEMBERID, SEQ, REF, STEP, DEPTH, TITLE, CONTENT, WDATE, DEL, READCOUNT, "
 				+ " LIKECOUNT, IMG, DIVISION, BBSTYPE " 
 				+ "	FROM BBS "
-				+ " WHERE BBSTYPE=? ";
-				
+				+ " WHERE DEL=0 AND BBSTYPE=? ";
+		
+				System.out.println(sql);
 		String sWord = "";
 		if(choice.equals("title")) {
 			sWord = " AND TITLE LIKE '%" + search + "%' ";
@@ -410,16 +401,22 @@ private static BbsDao dao = new BbsDao();
 		} 
 		sql = sql + sWord;
 		
-		sql = sql + " ORDER BY REF DESC, STEP ASC) ";
+		sql = sql + " ORDER BY REF DESC, STEP ASC) B, MEMBER M ";
 		
-		sql = sql + " WHERE DEL=0 AND RNUM >= ? AND RNUM <= ? ";
+		sql = sql + " WHERE  B.MEMBERID = M.MEMBERID AND RNUM >= ? AND RNUM <= ? ";
 		
 		
 		
 		
 		int start, end;
-		start = 1 + 10 * page;
-		end = 10 + 10 * page;		
+		
+		if(bbstype == 2) {
+			start = 1 + 8 * page;
+			end = 8 + 8 * page;		
+		} else {
+			start = 1 + 10 * page;
+			end = 10 + 10 * page;		
+		}
 		
 		System.out.println("start : "+start +" / end : "+end);
 		
@@ -457,7 +454,8 @@ private static BbsDao dao = new BbsDao();
 						rs.getInt(11),
 						rs.getString(12),
 						rs.getString(13),
-						rs.getInt(14));
+						rs.getInt(14),
+						rs.getInt(15));
 				list.add(dto);
 			}			
 			System.out.println("4/4 getBbsPagingList success");
@@ -485,6 +483,7 @@ private static BbsDao dao = new BbsDao();
 			sWord = " AND MEMBERID='" + search + "'";
 		} 
 		sql = sql + sWord;
+		sql += " AND DEL = 0 ";
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -742,14 +741,12 @@ private static BbsDao dao = new BbsDao();
 	
 	
 	/* 관리자가 트레이너 신청서를 수락하면 트레이너 인증 계정 전환 (memtype 을 5로 변환) */
-	public boolean authTrainer(int seq) {
+	public boolean authTrainer(String id) {
 		
 		String sql = " UPDATE MEMBER " + 
-					 " SET MEMTYPE = 5 " + 
-					 " WHERE MEMBERID = " + 
-					 " (SELECT MEMBERID " + 
-					 " FROM BBS " + 
-					 " WHERE SEQ = ?) ";
+					 " SET MEMTYPE = 5, "
+					 + " MEMLEVEL = 100 " + 
+					 " WHERE MEMBERID = ? ";
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -760,7 +757,7 @@ private static BbsDao dao = new BbsDao();
 			System.out.println("1/3 S authTrainer");
 			
 			psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, seq);
+			psmt.setString(1, id);
 			System.out.println("2/3 S authTrainer");
 			
 			count = psmt.executeUpdate();
@@ -801,7 +798,7 @@ private static BbsDao dao = new BbsDao();
 				+ " WHERE BBSTYPE=3 "
 				+ " ORDER BY REF DESC, STEP ASC) B, MEMBER M, TRAINER T "
 				+ " WHERE M.MEMBERID = B.MEMBERID AND B.SEQ = T.SEQ " 
-				+ "	AND DEL=0 AND RNUM >= 1 AND RNUM <= ? "
+				+ "	AND DEL=0 AND RNUM >= 1 "
 				+ " ORDER BY B.SEQ DESC ";
 		
 		
@@ -822,7 +819,6 @@ private static BbsDao dao = new BbsDao();
 			System.out.println("1/4 getTrainerBbsPagingList success");
 			System.out.println(sql);
 			psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, end);
 			System.out.println("2/4 getTrainerBbsPagingList success");
 			
 			rs = psmt.executeQuery();			

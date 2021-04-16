@@ -42,6 +42,47 @@
 <url-pattern>/chat</url-pattern>
 </servlet-mapping>
 
+<servlet>
+	<servlet-name>Calendar</servlet-name>
+	<servlet-class>controller.CalendarController</servlet-class>
+</servlet>  
+
+<servlet-mapping>
+	<servlet-name>Calendar</servlet-name>
+	<url-pattern>/calendar</url-pattern>
+</servlet-mapping>
+
+<servlet>
+   <servlet-name>qnaBbs</servlet-name>
+   <servlet-class>controller.QnABbsController</servlet-class>
+</servlet>
+
+<servlet-mapping>
+   <servlet-name>qnaBbs</servlet-name>
+   <url-pattern>/qnabbs</url-pattern>
+</servlet-mapping>
+
+  
+<servlet>
+	<servlet-name>fileupload</servlet-name>
+	<servlet-class>controller.FileUploadController</servlet-class>
+</servlet>
+  
+<servlet-mapping>
+	<servlet-name>fileupload</servlet-name>
+	<url-pattern>/fileupload</url-pattern>
+</servlet-mapping>
+  
+<servlet>
+   <servlet-name>fileupdate</servlet-name>
+   <servlet-class>controller.FileUpdateController</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>fileupdate</servlet-name>
+    <url-pattern>/fileupdate</url-pattern>
+</servlet-mapping>
+ 
   
   
   

@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-      <!--  =============운동페이지 링크 배너 =============== -->
+       <!--  =============운동페이지 링크 배너 =============== -->
       <div class="get-it">
         <div class="container">
           <div class="row">
             <div class="col-lg-8 text-center p-3">
               <h3>오늘 HOME FIT과 함께 트레이닝 하셨나요?</h3>
             </div>
-            <div class="col-lg-4 text-center p-3">   <a href="#" class="btn btn-template-outlined-white">운동하러 가기</a></div>
+            <div class="col-lg-4 text-center p-3">   <a href="exercise?param=exSearch" class="btn btn-template-outlined-white">운동하러 가기</a></div>
           </div>
         </div>
       </div>
@@ -25,27 +25,9 @@
               <hr class="d-block d-lg-none">
             </div>
             <div class="col-lg-3">
-              <h4 class="h6">Blog</h4>
-              <ul class="list-unstyled footer-blog-list">
-                <li class="d-flex align-items-center">
-                  <div class="image"><img src="img/detailsquare.jpg" alt="..." class="img-fluid"></div>
-                  <div class="text">
-                    <h5 class="mb-0"> <a href="post.html">Blog post name</a></h5>
-                  </div>
-                </li>
-                <li class="d-flex align-items-center">
-                  <div class="image"><img src="img/detailsquare.jpg" alt="..." class="img-fluid"></div>
-                  <div class="text">
-                    <h5 class="mb-0"> <a href="post.html">Blog post name</a></h5>
-                  </div>
-                </li>
-                <li class="d-flex align-items-center">
-                  <div class="image"><img src="img/detailsquare.jpg" alt="..." class="img-fluid"></div>
-                  <div class="text">
-                    <h5 class="mb-0"> <a href="post.html">Very very long blog post name</a></h5>
-                  </div>
-                </li>
-              </ul>
+              <h4 class="h6">고객센터</h4>
+              <p><strong>bit210324@gmail.com</strong></p>
+              <p>문의사항은 위 이메일 주소로 연락주시면 빠른 시일 내에 회신드리겠습니다. <br>If you have any inquiries, please contact us at the above email address and we will reply as soon as possible.</p>
               <hr class="d-block d-lg-none">
             </div>
             <div class="col-lg-3">
@@ -54,13 +36,13 @@
               <hr class="d-block d-lg-none">
             </div>
             <div class="col-lg-3">
+            <h4 class="h6">제휴업체</h4>
+            <br>
               <ul class="list-inline photo-stream">
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare.jpg" alt="..." class="img-fluid"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare2.jpg" alt="..." class="img-fluid"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare3.jpg" alt="..." class="img-fluid"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare3.jpg" alt="..." class="img-fluid"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare2.jpg" alt="..." class="img-fluid"></a></li>
-                <li class="list-inline-item"><a href="#"><img src="img/detailsquare.jpg" alt="..." class="img-fluid"></a></li>
+                <li class="list-inline-item"><a href="http://www.bansuksports.com/" target="_blank"><img src="images/bansuk_logo.jpg" alt="..." class="img-fluid"></a></li>
+                <li class="list-inline-item"><a href="http://melkinsports.com/" target="_blank"><img src="images/melkin_logo.png" alt="..." class="img-fluid"></a></li>
+                <li class="list-inline-item"><a href="http://www.myprotein.co.kr" target="_blank"><img src="images/myprotein_logo.jpg" alt="..." class="img-fluid"></a></li>
+                <li class="list-inline-item"><a href="https://www.rankingdak.com/" target="_blank"><img src="images/ranking_logo.png" alt="..." class="img-fluid"></a></li>
               </ul>
             </div>
           </div>

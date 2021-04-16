@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import dao.BbsDao;
+import dao.ExDao;
 import dto.BbsDto;
 import dto.MemberDto;
 import dto.TrainerDto;
@@ -37,12 +38,6 @@ public class BbsController extends HttpServlet{
 	}
 
 	
-	/**
-	 * @param req
-	 * @param resp
-	 * @throws ServletException
-	 * @throws IOException
-	 */
 	public void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
 		System.out.println("BbsController doProcess");
 		
@@ -92,9 +87,19 @@ public class BbsController extends HttpServlet{
 	    	//System.out.println("리스트 : " + list.size());
 
 	    	//총 페이지 수 구하기 ex) 23개 --> 3페이지
-	    	int bbsPage = len / 10;	
-	    	if(len%10 > 0) {	// 게시글이 23개면 (20 +) 3개를 위한 페이지를 하나 더 만들어준다.
-	    		bbsPage += 1;
+	    	
+	    	int bbsPage = 0;
+	    	
+	    	if(Integer.parseInt(bbsType) == 2) {
+	    		bbsPage = len / 8;	
+	    		if(len%8 > 0) {	// 게시글이 23개면 (20 +) 3개를 위한 페이지를 하나 더 만들어준다.
+	    			bbsPage += 1;
+	    		}
+	    	} else {
+	    		bbsPage = len / 10;	
+	    		if(len%10 > 0) {	// 게시글이 23개면 (20 +) 3개를 위한 페이지를 하나 더 만들어준다.
+	    			bbsPage += 1;
+	    		}
 	    	}
 	    	 
 	    	req.setAttribute("List", list);
@@ -292,6 +297,7 @@ public class BbsController extends HttpServlet{
 	    	String division = req.getParameter("division"); 
 	        String title = req.getParameter("title");
 	        String img = req.getParameter("img");
+	        String newFilename = req.getParameter("oldnewfile");
 	        String content = req.getParameter("content");
 	        String bbsType = req.getParameter("bbsType");
 
@@ -302,7 +308,7 @@ public class BbsController extends HttpServlet{
 	        System.out.println("content:" + content);
 	        System.out.println("bbsType:" + bbsType);
 	    	
-	        boolean b = dao.updateBbs(seq, title, content, img, division);
+	        boolean b = dao.updateBbs(seq, title, content, img, newFilename, division);
 	       
 	        if(b) 
 	    		resp.sendRedirect("bbs?param=getDetail&seq="+seq);
@@ -378,9 +384,11 @@ public class BbsController extends HttpServlet{
 	    	System.out.println("BbsController acceptTrainer 들어옴");
 	    	
 	    	int seq = Integer.parseInt(req.getParameter("seq"));
+	    	String id = req.getParameter("id");
+	    	System.out.println("seq : "+seq+" id : "+id);
 	    	
 	    	boolean b = dao.acceptTrainer(seq);
-	    	boolean b2 = dao.authTrainer(seq);
+	    	boolean b2 = dao.authTrainer(id);
 	    	
 	    	
 	    	if(b && b2) 
@@ -659,7 +667,7 @@ public class BbsController extends HttpServlet{
 	        		  				"profileImg : "+profileImg);
 	          
 	          
-	          boolean b = dao.updateBbs(Integer.parseInt(seq), title, content, profileImg, null);
+	          boolean b = dao.updateBbs(Integer.parseInt(seq), title, content, profileImg, null, null);
 	          
 	          if(b) 
 	      		resp.sendRedirect("bbs?param=goPage&bbsType=2");
@@ -680,7 +688,6 @@ public class BbsController extends HttpServlet{
 	    	out.println("<script>");
 	    	out.println("window.open('chat.jsp?tID="+bbs.getMemberId()+"', '', "
 	    			+ "'width=550, height=770, resizable=no, scrollbars=no ')");
-	    	out.println("history.back();");
 	    	out.println("</script>");
 	    	
 	    	
@@ -693,6 +700,154 @@ public class BbsController extends HttpServlet{
 	    	forward("trainerChatManager.jsp", req, resp);
 	    	
 	    }
+	    else if(param.equals("homefitFreedomboardList")) {
+			String choice = req.getParameter("choice");
+			String search = req.getParameter("search");
+			System.out.println("searchText:" + search);
+			
+			String spage = req.getParameter("pageNumber");
+			int page = 0;
+			if(spage != null && !spage.equals("")) {
+				page = Integer.parseInt(spage);
+			}
+			if(choice == null) {
+				choice = "";
+			}
+			if(search == null) {
+				search = "";
+			}
+			System.out.println(choice+","+search+","+page);
+			List<BbsDto> list = dao.getBbsPagingList(choice, search, page, 0);
+		
+			for (BbsDto b : list) {
+				System.out.println(b.toString());
+			}
+						
+			req.setAttribute("list", list);			
+			
+			int len = dao.getAllBbs(choice, search, 0);
+			int bbsPage = len / 10;		// 23 -> 2
+			if((len % 10) > 0){
+				bbsPage = bbsPage + 1;
+			}
+			
+			req.setAttribute("bbsPage", bbsPage + "");
+			req.setAttribute("pageNumber", page + "");
+			req.setAttribute("choice", choice);
+			req.setAttribute("search", search);
+			req.setAttribute("len", len+"");
+			
+			forward("homefitFreedomboardList.jsp", req, resp);			
+		}	
+		else if(param.equals("homefitFreedombbswrite")) {
+			resp.sendRedirect("fileupload?param=homefitFreedombbswrite");
+		}
+	
+		else if(param.equals("homefitFreedombbsdetail")) {
+			String sseq = req.getParameter("seq");
+			int seq = Integer.parseInt(sseq);
+			
+			dao.readcount(seq);		// 조회수 늘리기
+			
+			BbsDto dto = dao.getBbs(seq);
+			
+			
+			
+			req.setAttribute("bbs", dto);
+			
+			
+			
+			forward("homefitFreedombbsdetail.jsp", req, resp);
+		}
+		else if(param.equals("homefitFreedombbsupdate")) {
+			String sseq = req.getParameter("seq");
+			int seq = Integer.parseInt(sseq.trim());
+
+			BbsDto dto = dao.getBbs(seq);
+			
+			req.setAttribute("bbs", dto);
+			
+			forward("homefitFreedombbsupdate.jsp", req, resp);
+		}else if(param.equals("freedombbsupdateAf")) {
+			
+			String sseq = req.getParameter("seq");
+			int seq = Integer.parseInt(sseq.trim());
+
+			String title = req.getParameter("title");
+			String content = req.getParameter("content");
+			String division = req.getParameter("division");
+			String img = req.getParameter("img");
+			String newfilename = req.getParameter("newfilename");
+
+			boolean isS = dao.updateBbs(seq, title, content, division, img, newfilename);			
+			if(!isS) {
+				resp.sendRedirect("bbs?param=homefitFreedomboardList.jsp&seq=" + sseq);
+			}else {
+			resp.sendRedirect("bbs?param=homefitFreedomboardList");
+			}
+		}	
+			
+		else if(param.equals("homefitFreedombbsdelete")) {
+			int seq = Integer.parseInt( req.getParameter("seq") );
+			System.out.println("seq:" + seq);
+
+			dao.deleteBbs(seq);
+			
+			resp.sendRedirect("bbs?param=homefitFreedomboardList");
+		}
+		else if(param.equals("homefitFreedomanswer")) {
+			int seq = Integer.parseInt( req.getParameter("seq") );
+			BbsDto dto = BbsDao.getInstance().getBbs(seq);
+			
+			req.setAttribute("bbs", dto);
+			
+			forward("homefitFreedomanswer.jsp", req, resp);
+		}
+		else if(param.equals("freedomanswerAf")) {
+			
+			
+	        String img = req.getParameter("img");
+	        System.out.println("img:" + img);
+	        int bbsType = Integer.parseInt(req.getParameter("bbsType"));
+	        System.out.println("bbsType:" + bbsType);
+			
+			
+			
+			int seq = Integer.parseInt( req.getParameter("seq") );
+			String id = req.getParameter("id");
+			String division = req.getParameter("division");
+			String title = req.getParameter("title");
+			String content = req.getParameter("content");
+			
+			if(title.equals("") || content.equals("")) {
+				req.setAttribute("answer", "n");
+				resp.sendRedirect("bbs?param=homefitFreedomanswer&seq=" + seq);
+			}
+			
+			
+			else {
+				boolean isS = dao.answer(seq, new BbsDto(id, title, content, img, division, bbsType));
+				if(!isS){
+					resp.sendRedirect("bbs?param=homefitFreedomanswer&seq=" + seq);
+				}
+				resp.sendRedirect("bbs?param=homefitFreedomboardList");
+			}
+
+		}
+	    
+  		
+  		else if(param.equals("likes")) {
+  	
+  			int seq = Integer.parseInt( req.getParameter("seq") );
+  			dao.likecount(seq);
+  			int likeCount = dao.getLikeCount(seq);
+  			
+  			JSONObject jObj = new JSONObject();
+  			jObj.put("like", likeCount);
+  			resp.setContentType("application/x-json; charset=UTF-8");
+  			resp.getWriter().print(jObj);
+  			
+  		}
 	    
 	    
 	}

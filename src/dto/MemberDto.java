@@ -57,7 +57,50 @@ public class MemberDto implements Serializable{
       this.name = name;
       this.memType = memType;
    }
+   
 
+   
+	public MemberDto(String memberID, String email, String name, String gender, String profileImg, int age) {
+		super();
+		this.memberID = memberID;
+		this.email = email;
+		this.name = name;
+		this.gender = gender;
+		this.profileImg = profileImg;
+		this.age = age;
+	}
+
+
+
+
+
+	public MemberDto(String memberID, String name, String email,  String gender, String trainerID, int age, int memLevel) {
+		super();
+		this.memberID = memberID;
+		this.email = email;
+		this.name = name;
+		this.gender = gender;
+		this.trainerID = trainerID;
+		this.age = age;
+		this.memLevel = memLevel;
+	}
+	
+	
+	public MemberDto(String memberID, String name, String email,  String gender, String profileImg, int age, int memLevel, String gymName) {
+		super();
+		this.memberID = memberID;
+		this.name = name;
+		this.email = email;
+		this.gender = gender;
+		this.profileImg = profileImg;
+		this.age = age;
+		this.memLevel = memLevel;
+		this.gymName = gymName;
+	}
+
+
+   
+   
 
    public void setCount(int count) {
       this.count = count;

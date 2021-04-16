@@ -8,10 +8,12 @@
 Object ologin = session.getAttribute("login");
 String logincheck = (String)(request.getAttribute("logincheck"));
 MemberDto mem = null;
+
 if(ologin == null){
    %>   
    <script>
-  // alert('로그인 해 주십시오');
+   alert('로그인이 필요한 서비스입니다.');
+   location.href = "main.jsp";
    </script>   
    <%
 }
@@ -19,6 +21,8 @@ else{
    mem = (MemberDto)ologin;
    request.setAttribute("mem", mem);
 }
+
+
 
 if(logincheck != null) {
 	if(logincheck.equals("NO")) {
@@ -28,11 +32,8 @@ if(logincheck != null) {
 		</script>
 <%		
 	}
-	
 }
-
 %>
-    
     
     
 <!DOCTYPE html>
@@ -69,17 +70,6 @@ if(logincheck != null) {
     <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png">
     
-    <style type="text/css">
-    .jb-box {
-		 width: 100%; 
-		 height: 750px;
-		 overflow: hidden;
-	 	 margin: 0px auto; 
-	 	 padding-top: 5px;
-		 background-position: center top;
-		 background-size:cover;
-	 }	
-    </style>
   </head>
   <body>
   
@@ -91,15 +81,27 @@ if(logincheck != null) {
           <div class="row d-flex align-items-center">
             <div class="col-md-6 d-md-block d-none">
              <c:if test="${mem.memberID != null }">
-              <p><img alt="" src="images/level/${mem.memLevel }.gif" style="width: 18px; height: 18px;"> <b>${mem.memberID }</b> 님 반갑습니다.&emsp;다음 레벨까지 <b>${20-mem.count }</b> pt 남았습니다.</p>
-             </c:if> 
+             <%
+             	if(ologin != null && mem.getMemType()==0){
+             		%>
+             			<p><img alt="" src="images/level/${mem.memLevel }.gif" style="width: 18px; height: 18px;"> <a href="member?param=infoMem&memId=${mem.memberID }"><b>${mem.memberID }</b></a> 님 반갑습니다.&emsp;다음 레벨까지 <b><%=20-mem.getCount() %></b> pt 남았습니다.</p>
+             		<%
+             	}
+             	else if(ologin != null && mem.getMemType()==1 || mem.getMemType()==5){
+             		%>
+         			<p><img alt="" src="images/level/${mem.memLevel }.gif" style="width: 18px; height: 18px;"> <a href="member?param=infoMem&memId=${mem.memberID }"><b>${mem.memberID }</b></a> 님 반갑습니다. 트레이너로 입장하셨습니다. </p>
+         			<%
+             	}
+             	else if(ologin != null && mem.getMemType()==2){
+             		%>
+         			<p><img alt="" src="images/level/${mem.memLevel }.gif" style="width: 18px; height: 18px;"> <b>${mem.memberID }</b> 님 반갑습니다. 관리자로 입장하셨습니다. </p>
+         			<%
+             	}
+             %>
+             </c:if>  
             </div>
             <div class="col-md-6">
               <div class="d-flex justify-content-md-end justify-content-between">
-                <ul class="list-inline contact-info d-block d-md-none">
-                  <li class="list-inline-item"><a href="#"><i class="fa fa-phone"></i></a></li>
-                  <li class="list-inline-item"><a href="#"><i class="fa fa-envelope"></i></a></li>
-                </ul>
                  <div class="login">
                       <%
                       if(mem == null || mem.getMemberID().equals("")){ 
@@ -149,8 +151,8 @@ if(logincheck != null) {
               </form>
               
               
-              <p class="text-center text-muted">아직 회원가입을 안하셨나요?</p>
-              <p class="text-center text-muted"><a href="#"><strong>가입하기</strong></a> 나만의 운동 루틴으로 집에서도 편안하게 운동해보세요!</p>
+              <p class="text-center text-muted">아직 회원가입을 안하셨나요? <a href="regi.jsp"><strong>가입하기</strong></a> </p>
+              <p class="text-center text-muted">나만의 운동 루틴으로 집에서도 편안하게 운동해보세요!</p>
             </div>
           </div>
         </div>
@@ -164,45 +166,65 @@ if(logincheck != null) {
       <!-- ========상단 로고 & 네비게이션 ==========-->
       <header class="nav-holder make-sticky">
         <div id="navbar" role="navigation" class="navbar navbar-expand-lg">
-          <div class="container"><a href="main.jsp" class="navbar-brand home"><img src="images/logo-black.png" alt="HOME-FIT logo" class="d-none d-md-inline-block" style="width: 180px; height: 120px"><img src="images/logo-black-small.png" alt="HOME-FIT logo" class="d-inline-block d-md-none"><span class="sr-only">Universal - go to homepage</span></a>
+          <div class="container"><a href="main.jsp" class="navbar-brand home"><img src="images/logo-black.png" alt="HOME-FIT logo" class="d-none d-md-inline-block" style="width: 180px; height: 120px"><img src="images/logo-black-small.png" alt="HOME-FIT logo" class="d-inline-block d-md-none"><span class="sr-only">HomeFit - go to homepage</span></a>
             <button type="button" data-toggle="collapse" data-target="#navigation" class="navbar-toggler btn-template-outlined"><span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i></button>
             <div id="navigation" class="navbar-collapse collapse">
               <ul class="nav navbar-nav ml-auto">
          
                 <!-- ============= Dropdown 메뉴 ===============-->
-                <li class="nav-item dropdown"><a href="javascript: void(0)" data-toggle="dropdown" class="dropdown-toggle">운동하기 <b class="caret"></b></a>
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">운동하기 <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-item"><a href="contact.html" class="nav-link">나의 루틴</a></li>
-                    <li class="dropdown-item"><a href="contact2.html" class="nav-link">운동 선택</a></li>
-                    <li class="dropdown-item"><a href="contact3.html" class="nav-link">부위 선택</a></li>
-                    <li class="dropdown-item"><a href="contact4.html" class="nav-link">난이도 선택</a></li>
+                    <li class="dropdown-item"><a href="exercise?param=exMine&memId=${mem.memberID}" class="nav-link">나의 루틴</a></li>
+                    <li class="dropdown-item"><a href="exercise?param=exSearch" class="nav-link">운동 선택</a></li>
                   </ul>
                 </li>
-                <li class="nav-item dropdown"><a href="javascript: void(0)" data-toggle="dropdown" class="dropdown-toggle">운동일지 <b class="caret"></b></a>
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">운동일지 <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-item"><a href="contact.html" class="nav-link">운동 캘린더</a></li>
-                    <li class="dropdown-item"><a href="contact2.html" class="nav-link">체중량 그래프</a></li>
+                    <li class="dropdown-item"><a href="calendar?param=calendar" class="nav-link">운동 캘린더</a></li>
+                    <li class="dropdown-item"><a href="member?param=dweightGraph" class="nav-link">체중량 그래프</a></li>
                   </ul>
                 </li>
-                <li class="nav-item dropdown"><a href="javascript: void(0)" data-toggle="dropdown" class="dropdown-toggle">트레이너 <b class="caret"></b></a>
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">트레이너 <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-item"><a href="howToUseTraining.jsp" class="nav-link">이용 방법</a></li>
-                    <li class="dropdown-item"><a href="bbs?param=goTrainerListPage" class="nav-link">트레이너 소개</a></li>
-                    <c:if test="${mem.memType > 0 }">
-                    	<li class="dropdown-item"><a href="bbs?param=goPage&bbsType=4" class="nav-link">트레이너 신청</a></li>
-                    	<li class="dropdown-item"><a href="chat?param=goChatManager" class="nav-link">채팅 관리</a></li>
-                    </c:if>
+                    <li class="dropdown-item"><a href="howToUse.jsp" class="nav-link">이용 방법</a></li>
+                     <li class="dropdown-item"><a href="bbs?param=goTrainerListPage" class="nav-link">트레이너 소개</a></li>
+                      <%	//트레이너나 관리자만 볼 수 있는 메뉴
+                    if(mem != null && mem.getMemType() != 0){
+                    	%>
+                    	 <li class="dropdown-item"><a href="bbs?param=goPage&bbsType=4" class="nav-link">pt 자격 신청</a></li>
+                    	 
+                    	 <%//트레이너만 볼 수 있는 메뉴
+                    	 	if(mem.getMemType() == 5){
+                    	 		%>
+                    	 		<li class="dropdown-item"><a href="chat?param=goChatManager" class="nav-link">채팅 관리</a></li>
+                    	 		<%
+                    	 	}
+                    	 %>
+                    	 
+                    	<%
+                    }%>
                   </ul>
                 </li>
-                <li class="nav-item dropdown"><a href="javascript: void(0)" data-toggle="dropdown" class="dropdown-toggle">커뮤니티 <b class="caret"></b></a>
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">커뮤니티 <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-item"><a href="bbs?param=goPage&bbsType=0" class="nav-link">자유게시판</a></li>
-                    <li class="dropdown-item"><a href="bbs?param=goPage&bbsType=1" class="nav-link">Q&A</a></li>
+                    <li class="dropdown-item"><a href="bbs?param=homefitFreedomboardList&bbsType=0" class="nav-link">자유게시판</a></li>
+                    <li class="dropdown-item"><a href="qnabbs?param=qnabbslist" class="nav-link">Q&A</a></li>
                     <li class="dropdown-item"><a href="bbs?param=goPage&bbsType=2" class="nav-link">바디프로필</a></li>
                   </ul>
                 </li>
-                <!-- ============= Dropdown 메뉴 END ===============-->
+                <%	//트레이너나 관리자만 볼 수 있는 메뉴
+                if(mem != null &&mem.getMemType()==2){
+                	%>
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">관리 <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown-item"><a href="manage?param=searchNm" class="nav-link">회원관리</a></li>
+                    <li class="dropdown-item"><a href="manage?param=searchTm" class="nav-link">트레이너 관리</a></li>
+                  </ul>
+                </li>
+                <%
+                }%>
               </ul>
+                <!-- ============= Dropdown 메뉴 END ===============-->
             </div>
             <div id="search" class="collapse clearfix">
               <form role="search" class="navbar-form">

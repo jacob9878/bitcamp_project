@@ -19,7 +19,20 @@ public class BbsDto implements Serializable{
 	private int bbstype;
 	private String memProfileImg;
 	private String trainerPrice;
+	private String newfilename;
+	private int memLevel;
 	
+	
+	
+	
+	public int getMemLevel() {
+		return memLevel;
+	}
+
+	public void setMemLevel(int memLevel) {
+		this.memLevel = memLevel;
+	}
+
 	public BbsDto() {
 	}
 	
@@ -30,7 +43,27 @@ public class BbsDto implements Serializable{
 		this.content = content;
 	}
 	
-
+	public BbsDto(String memberId, String title, String content, String img, String division) {
+		super();
+		this.memberId = memberId;
+		this.title = title;
+		this.content = content;
+		this.img = img;
+		this.division = division;
+		
+	}
+	
+	public BbsDto(String memberId, String title, String content, String img, String newFilename, String division) {
+		super();
+		this.memberId = memberId;
+		this.title = title;
+		this.content = content;
+		this.img = img;
+		this.newfilename = newFilename;
+		this.division = division;
+	}
+	
+	
 	public BbsDto(String memberId, String title, String content, String img, String division, int bbstype) {
 		super();
 		this.memberId = memberId;
@@ -42,8 +75,20 @@ public class BbsDto implements Serializable{
 	}
 
 	
+	public BbsDto(int seq, String title, String content, String img,String newFilename, String division) {
+		super();
+		this.seq = seq;
+		this.title = title;
+		this.content = content;
+		this.img = img;
+		this.division = division;
+		this.newfilename = newFilename;
+	}
+	
+
 	public BbsDto(String memberId, int seq, int ref, int step, int depth, String title, String content, String wdate,
-			int del, int readcount, int likecount, String img, String division, int bbstype) {
+			int del, int readcount, int likecount, String img, String division, int bbstype, String memProfileImg,
+			String trainerPrice, String newfilename) {
 		super();
 		this.memberId = memberId;
 		this.seq = seq;
@@ -59,11 +104,68 @@ public class BbsDto implements Serializable{
 		this.img = img;
 		this.division = division;
 		this.bbstype = bbstype;
+		this.memProfileImg = memProfileImg;
+		this.trainerPrice = trainerPrice;
+		this.newfilename = newfilename;
 	}
 
+	public BbsDto(String memberId, int seq, int ref, int step, int depth, String title, String content, String wdate,
+			int del, int readcount, int likecount, String img, String division, int bbstype, int memLevel) {
+		super();
+		this.memberId = memberId;
+		this.seq = seq;
+		this.ref = ref;
+		this.step = step;
+		this.depth = depth;
+		this.title = title;
+		this.content = content;
+		this.wdate = wdate;
+		this.del = del;
+		this.readcount = readcount;
+		this.likecount = likecount;
+		this.img = img;
+		this.division = division;
+		this.bbstype = bbstype;
+		this.memLevel= memLevel;
+	}
+	
 	
 
+	public BbsDto(String memberId, int seq, int ref, int step, int depth, String title, String content, String wdate,
+			int del, int readcount, int likecount, String img, String newFilename, String division, int bbstype) {
+		super();
+		this.memberId = memberId;
+		this.seq = seq;
+		this.ref = ref;
+		this.step = step;
+		this.depth = depth;
+		this.title = title;
+		this.content = content;
+		this.wdate = wdate;
+		this.del = del;
+		this.readcount = readcount;
+		this.likecount = likecount;
+		this.img = img;
+		this.division = division;
+		this.bbstype = bbstype;
+		this.newfilename = newFilename;
+	}
 
+
+
+	public BbsDto(String memberId, String title, String content, String img, String newfilename, String division,
+			int bbstype) {
+		super();
+		this.memberId = memberId;
+		this.title = title;
+		this.content = content;
+		this.img = img;
+		this.newfilename = newfilename;
+		this.division = division;
+		this.bbstype = bbstype;
+	}
+	
+	
 
 	public BbsDto(String memberId, int seq, int ref, int step, int depth, String title, String content, String wdate,
 			int del, int readcount, int likecount, String img, String division, int bbstype, String memProfileImg,
@@ -89,6 +191,16 @@ public class BbsDto implements Serializable{
 
 	
 	
+	
+	
+	public String getNewfilename() {
+		return newfilename;
+	}
+
+	public void setNewfilename(String newfilename) {
+		this.newfilename = newfilename;
+	}
+
 	public String getMemberId() {
 		return memberId;
 	}

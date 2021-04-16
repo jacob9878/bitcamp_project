@@ -418,7 +418,8 @@ p.lead {
   color: #fff;
   text-align: center;
   border-radius: 50%;
-  font-size: 0.75rem;
+  font-size: 17px;
+  padding-top: 3px;
 }
 
 .ul-icons .icon-filled {
@@ -449,7 +450,8 @@ ul.social a {
   text-align: center;
   border-radius: 50%;
   margin: 0 2px;
-  font-size: 0.8rem;
+  font-size: 16px;
+  padding-top: 5px;
 }
 
 ul.social a:hover {
@@ -459,6 +461,10 @@ ul.social a:hover {
 
 ul.social a.facebook {
   background: #4561ae;
+}
+
+ul.social a.instagram {
+  background: #B80375;
 }
 
 ul.social a.gplus {
@@ -537,12 +543,6 @@ ul.social a.email {
 
 table {
   font-size: 0.9rem;
-}
-
-table img {
-  min-width: 50px !important;
-  max-width: 50px !important;
-  height: 50px;
 }
 
 table input[type="number"] {

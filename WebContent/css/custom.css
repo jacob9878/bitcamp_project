@@ -152,13 +152,13 @@
 .portlet-dark-blue,
 .portlet-default>.portlet-heading,
 .portlet-dark-blue>.portlet-heading {
-    border-color: #34495e;
+    border-color: #4BBCA5;
 }
 
 .portlet-default>.portlet-heading,
 .portlet-dark-blue>.portlet-heading {
     color: #fff;
-    background-color: #34495e;
+    background-color: #4BBCA5;
 }
 
 .portlet-basic,
